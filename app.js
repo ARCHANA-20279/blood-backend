@@ -31,6 +31,34 @@ response.json({"status":"success"})
     }})
 
 })
+app.post("/viewmypost",async(request,response)=>{
+let input=request.body
+let token=request.headers.token
+Jsonwebtoken.verify(token,"blogApp",async(error,decoded)=>{
+    if(decoded && decoded.email){  
+       postModel.find().then(
+
+        (items)=>{
+
+            response.json({"status":"success","data":items})
+        }
+       ).catch((error)=>{
+            response.json({"status":"error"})
+        
+
+
+})
+    }else{
+
+        response.json({"status":"invalid token"})
+    }
+})})
+
+
+
+
+
+
 
 app.post("/viewall",async(request,response)=>{
 
