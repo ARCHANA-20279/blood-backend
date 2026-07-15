@@ -4,6 +4,7 @@ const Mongoose=require("mongoose")
 const Jsonwebtoken=require("jsonwebtoken")
 const Bcrypt=require("bcrypt")
 const userModel=require("./models/users")
+const postModel = require("./models/posts")
 
 
 let app=Express()
@@ -11,6 +12,37 @@ app.use(Express.json())
 app.use(Cors())
 
 Mongoose.connect("mongodb://archana:archana@ac-58g5bmi-shard-00-00.5ys18b0.mongodb.net:27017,ac-58g5bmi-shard-00-01.5ys18b0.mongodb.net:27017,ac-58g5bmi-shard-00-02.5ys18b0.mongodb.net:27017/blogAppDb?ssl=true&replicaSet=atlas-cngkhq-shard-0&authSource=admin&appName=Cluster0://")
+
+app.post("/create",async(request,response)=>{
+    let input=request.body
+
+    let token=request.headers.token
+    Jsonwebtoken.verify(token,"blogApp",async(error,decoded)=>{
+if(decoded && decoded.email){  
+let result=new postModel(input)
+await result.save()
+response.json({"status":"success"})
+
+
+    }else{
+
+
+        response.json({"status":"invalid token"})
+    }})
+
+})
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.post("/signin",async(request,response)=>{
 
